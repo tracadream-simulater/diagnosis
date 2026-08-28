@@ -40,8 +40,8 @@
   <div id="message"></div>
 
   <script>
-    // ★★★ ここにSTEP 1で取得したGASのWebアプリURLを貼り付けます ★★★
-    const GAS_URL = "YOhttps://script.google.com/macros/s/AKfycbxySxS_q9BGOkBwZKbCcXTyhARo6eIj4yIN2Ekt3CTWIoSUZuD-Qfy5BvfG6DV60Wue/exec";
+    // ★先頭の「YO」を削除して正しいURLに修正しました★
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxySxS_q9BGOkBwZKbCcXTyhARo6eIj4yIN2Ekt3CTWIoSUZuD-Qfy5BvfG6DV60Wue/exec";
 
     document.getElementById('testForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -64,15 +64,15 @@
       // GASへ非同期通信（fetch）
       fetch(GAS_URL, {
         method: 'POST',
-        // mode: 'no-cors' を指定することで、ローカルファイル(file://)やGitHubからのクロスドメイン通信制限を回避します
         mode: 'no-cors',
+        // CORSブロックを回避するため Content-Type を text/plain に変更
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain'
         },
         body: JSON.stringify(payload)
       })
       .then(() => {
-        // no-corsの場合レスポンスの中身は読めませんが、エラーが出なければ到達しています
+        messageDiv.style.color = "green";
         messageDiv.innerText = "送信完了！スプレッドシートを確認してください。";
         submitBtn.innerText = "送信完了";
       })
