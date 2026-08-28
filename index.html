@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>診断フォーム連携テスト</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
+    .field { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input { width: 100%; padding: 10px; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; border-radius: 4px; }
+    button:disabled { background: #ccc; }
+    #message { margin-top: 15px; font-weight: bold; color: green; }
+  </style>
+</head>
+<body>
+
+  <h2>診断フォーム送信テスト</h2>
+
+  <form id="testForm">
+    <div class="field">
+      <label>仮の診断結果</label>
+      <input type="text" id="diagnosisResult" value="Bプラン（おすすめ）" readonly style="background:#eee;">
+    </div>
+    
+    <div class="field">
+      <label>お名前</label>
+      <input type="text" id="name" placeholder="山田 太郎" required>
+    </div>
+
+    <div class="field">
+      <label>電話番号</label>
+      <input type="tel" id="phone" placeholder="09012345678" required>
+    </div>
+
+    <button type="submit" id="submitBtn">送信して連携テスト</button>
+  </form>
+
+  <div id="message"></div>
+
+  <script>
+    // ★★★ ここにSTEP 1で取得したGASのWebアプリURLを貼り付けます ★★★
+    const GAS_URL = "YOhttps://script.google.com/macros/s/AKfycbxySxS_q9BGOkBwZKbCcXTyhARo6eIj4yIN2Ekt3CTWIoSUZuD-Qfy5BvfG6DV60Wue/exec";
+
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const messageDiv = document.getElementById('message');
+
+      // ボタンを無効化（二重送信防止）
+      submitBtn.disabled = true;
+      submitBtn.innerText = "送信中...";
+      messageDiv.innerText = "";
+
+      // 送信するデータの組み立て
+      const payload = {
+        diagnosisResult: document.getElementById('diagnosisResult').value,
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value
+      };
+
+      // GASへ非同期通信（fetch）
+      fetch(GAS_URL, {
+        method: 'POST',
+        // mode: 'no-cors' を指定することで、ローカルファイル(file://)やGitHubからのクロスドメイン通信制限を回避します
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        // no-corsの場合レスポンスの中身は読めませんが、エラーが出なければ到達しています
+        messageDiv.innerText = "送信完了！スプレッドシートを確認してください。";
+        submitBtn.innerText = "送信完了";
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        messageDiv.style.color = "red";
+        messageDiv.innerText = "送信エラーが発生しました。";
+        submitBtn.disabled = false;
+        submitBtn.innerText = "送信して連携テスト";
+      });
+    });
+  </script>
+
+</body>
+</html>
