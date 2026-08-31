@@ -1289,13 +1289,13 @@
         setError('emailError', ''); setError('nameError', ''); setError('phoneError', '');
 
         if (!email.value.trim()) { setError('emailError', 'メールアドレスを入力してください。'); valid = false; }
-        else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value.trim())) { setError('emailError', 'メールアドレスの形式をご確認ください。'); valid = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { setError('emailError', 'メールアドレスの形式をご確認ください。'); valid = false; }
 
         if (!name.value.trim()) { setError('nameError', '氏名を入力してください。'); valid = false; }
 
-        const phoneValue = phone.value.replace(/[\\s\\-()]/g, '');
+        const phoneValue = phone.value.replace(/[\s()-]/g, '');
         if (!phoneValue) { setError('phoneError', '電話番号を入力してください。'); valid = false; }
-        else if (!/^\\+?\\d{10,15}$/.test(phoneValue)) { setError('phoneError', '電話番号の形式をご確認ください。'); valid = false; }
+        else if (!/^\+?\d{10,15}$/.test(phoneValue)) { setError('phoneError', '電話番号の形式をご確認ください。'); valid = false; }
         return valid;
       };
 
