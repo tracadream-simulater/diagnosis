@@ -118,12 +118,12 @@
 
     .hero{
       background:#fff;
-      height:360px;
+      height:430px;
       min-height:0;
       display:grid;
       grid-template-columns:1.04fr .96fr;
-      gap:28px;
-      padding:18px 38px 0;
+      gap:36px;
+      padding:28px 42px 22px;
       position:relative;
       overflow:hidden;
     }
@@ -137,9 +137,9 @@
     .hero-badge{
       display:inline-flex;
       align-items:center;
-      min-height:38px;
+      min-height:40px;
       padding:0 34px 0 20px;
-      margin-bottom:12px;
+      margin-bottom:18px;
       color:#fff;
       background:var(--navy);
       font-size:15px;
@@ -171,7 +171,7 @@
       position:relative;
       width:max-content;
       max-width:100%;
-      margin:3px 0 14px 8px;
+      margin:2px 0 20px 8px;
       padding-left:18px;
       color:var(--navy-deep);
       font-weight:800;
@@ -192,7 +192,7 @@
 
     .lead-top{
       display:block;
-      margin-bottom:4px;
+      margin-bottom:7px;
       font-size:16px;
       font-weight:900;
       color:var(--navy-deep);
@@ -222,7 +222,7 @@
     }
 
     .hero-title{
-      margin:13px 0 18px 8px;
+      margin:14px 0 26px 8px;
       font-size:clamp(36px, 2.65vw, 46px);
       line-height:1.18;
       letter-spacing:.01em;
@@ -233,7 +233,7 @@
     .hero-cta{
       width:min(470px,100%);
       height:54px;
-      margin:0 0 12px 8px;
+      margin:0 0 18px 8px;
       border:none;
       border-radius:999px;
       background:linear-gradient(180deg,#e31a22 0%,#c91018 100%);
@@ -281,7 +281,7 @@
     }
 
     .security{
-      margin:8px 0 0 54px;
+      margin:12px 0 0 54px;
       display:flex;
       align-items:center;
       gap:12px;
@@ -307,7 +307,7 @@
       display:flex;
       align-items:flex-end;
       justify-content:center;
-      overflow:hidden;
+      overflow:visible;
     }
 
     .visual-circle{
@@ -386,14 +386,20 @@
     .advisor{
       position:relative;
       z-index:3;
-      width:min(330px, 84%);
-      margin-left:35px;
+      height:100%;
+      max-height:402px;
+      margin-left:24px;
       align-self:flex-end;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
     }
 
     .advisor img{
-      width:100%;
-      height:auto;
+      width:auto;
+      height:100%;
+      max-width:100%;
+      max-height:402px;
       object-fit:contain;
       object-position:center bottom;
     }
@@ -747,6 +753,62 @@
     }
     .detail-link span{margin-left:10px;color:var(--gold-light);}
 
+    .privacy-consent{
+      margin-top:22px;
+      padding:16px 18px;
+      border:1px solid #e2e6eb;
+      border-radius:12px;
+      background:#f8f9fb;
+    }
+
+    .privacy-consent-title{
+      margin:0 0 7px;
+      color:var(--navy);
+      font-size:14px;
+      font-weight:900;
+    }
+
+    .privacy-consent-text{
+      margin:0 0 12px;
+      color:#616b78;
+      font-size:12px;
+      line-height:1.75;
+    }
+
+    .privacy-consent-text a{
+      color:var(--navy);
+      text-decoration:underline;
+      font-weight:800;
+    }
+
+    .privacy-check{
+      display:flex;
+      align-items:flex-start;
+      gap:9px;
+      cursor:pointer;
+      color:#243a57;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.55;
+    }
+
+    .privacy-check input{
+      width:18px;
+      height:18px;
+      margin:1px 0 0;
+      accent-color:var(--navy);
+      flex:none;
+    }
+
+    .privacy-error{
+      min-height:17px;
+      margin-top:6px;
+      color:#c5151c;
+      font-size:12px;
+      font-weight:700;
+    }
+
+
     @media (max-width:720px){
       .questionnaire{padding:0;}
       .questionnaire.is-open{align-items:stretch;}
@@ -846,7 +908,7 @@
 
       .hero{
         display:block;
-        padding:16px 16px 0;
+        padding:20px 16px 0;
       }
 
       .hero-badge{
@@ -911,14 +973,22 @@
       }
 
       .hero-visual{
-        min-height:360px;
-        margin-top:8px;
+        min-height:390px;
+        margin-top:14px;
+        overflow:hidden;
       }
 
       .advisor{
-        width:340px;
+        height:370px;
+        max-height:370px;
         max-width:90%;
-        margin-left:20px;
+        margin-left:0;
+      }
+
+      .advisor img{
+        height:100%;
+        max-height:370px;
+        width:auto;
       }
 
       .visual-circle{
@@ -1239,9 +1309,24 @@
                 <div class="field-error" id="phoneError"></div>
               </div>
             </div>
+            <div class="privacy-consent">
+              <p class="privacy-consent-title">個人情報の取り扱いについて</p>
+              <p class="privacy-consent-text">
+                ご入力いただいた個人情報は、お問い合わせへの回答、資料のご案内、
+                ご相談対応などの目的で利用します。詳細は
+                <a href="https://showtime-traca.com/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+                をご確認ください。
+              </p>
+              <label class="privacy-check">
+                <input id="privacyConsent" name="privacyConsent" type="checkbox" required>
+                <span>プライバシーポリシーを確認し、個人情報の取り扱いに同意します。</span>
+              </label>
+              <div class="privacy-error" id="privacyError"></div>
+            </div>
+
             <div class="question-actions">
               <button class="btn-back" type="button" data-back>戻る</button>
-              <button class="btn-complete" type="button" id="completeButton">回答を完了する</button>
+              <button class="btn-complete" type="button" id="completeButton">同意して回答を送信する</button>
             </div>
           </section>
 
@@ -1249,10 +1334,6 @@
             <div class="completion-icon">✓</div>
             <h3 class="completion-title">ご回答ありがとうございました。</h3>
             <p class="completion-text">ご回答内容を元に、トレカ自販機について最適な情報をご案内いたします。</p>
-            <div class="privacy-box">
-              <h4>プライバシーポリシー</h4>
-              <p>ご入力いただいた個人情報は、お問い合わせへの回答、資料のご案内、ご相談対応などの目的で取り扱います。個人情報の取扱いについては、<a href="https://showtime-traca.com/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。</p>
-            </div>
             <a class="detail-link" href="https://showtime-traca.com/" target="_blank" rel="noopener noreferrer">トレカ自販機の詳細ページはこちら <span>→</span></a>
           </section>
 
@@ -1332,8 +1413,12 @@
         const email = document.getElementById('email');
         const name = document.getElementById('name');
         const phone = document.getElementById('phone');
+        const privacyConsent = document.getElementById('privacyConsent');
         let valid = true;
-        setError('emailError', ''); setError('nameError', ''); setError('phoneError', '');
+        setError('emailError', '');
+        setError('nameError', '');
+        setError('phoneError', '');
+        setError('privacyError', '');
 
         if (!email.value.trim()) { setError('emailError', 'メールアドレスを入力してください。'); valid = false; }
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { setError('emailError', 'メールアドレスの形式をご確認ください。'); valid = false; }
@@ -1343,6 +1428,12 @@
         const phoneValue = phone.value.replace(/[\s()-]/g, '');
         if (!phoneValue) { setError('phoneError', '電話番号を入力してください。'); valid = false; }
         else if (!/^\+?\d{10,15}$/.test(phoneValue)) { setError('phoneError', '電話番号の形式をご確認ください。'); valid = false; }
+
+        if (!privacyConsent.checked) {
+          setError('privacyError', 'プライバシーポリシーへの同意が必要です。');
+          valid = false;
+        }
+
         return valid;
       };
 
