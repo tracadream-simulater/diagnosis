@@ -1,89 +1,1315 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>診断フォーム連携テスト</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>決算対策ナビ｜資料請求</title>
+  <meta name="description" content="トレカ自販機の導入・ご相談を法人向けにご案内します。" />
+
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
-    .field { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input { width: 100%; padding: 10px; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; border-radius: 4px; }
-    button:disabled { background: #ccc; }
-    #message { margin-top: 15px; font-weight: bold; color: green; }
+    :root{
+      --navy:#0a2f63;
+      --navy-deep:#062651;
+      --gold:#c89125;
+      --gold-light:#e4b84f;
+      --red:#d3171f;
+      --bg:#fbf7ef;
+      --text:#0d2d5b;
+      --muted:#6d7480;
+      --white:#fff;
+      --border:#e7e9ee;
+      --shadow:0 10px 30px rgba(9,42,86,.08);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:
+        "Noto Sans JP","Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN",
+        "Meiryo",sans-serif;
+      color:var(--text);
+      background:
+        linear-gradient(rgba(255,255,255,.34), rgba(255,255,255,.34)),
+        var(--bg);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    /* =========================
+       Header
+    ========================= */
+    .site-header{
+      height:68px;
+      background:#fff;
+      border-bottom:1px solid #efefef;
+      display:flex;
+      align-items:center;
+      position:relative;
+      z-index:10;
+    }
+
+    .header-inner{
+      width:min(1480px, calc(100% - 48px));
+      margin:0 auto;
+      position:relative;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .brand{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* ★ここを実ロゴ画像に差し替え */
+    .brand img{
+      width:245px;
+      height:auto;
+      object-fit:contain;
+    }
+
+    .header-cta{
+      min-width:175px;
+      height:35px;
+      padding:0 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border-radius:999px;
+      background:var(--red);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 4px 10px rgba(211,23,31,.18);
+      transition:.2s ease;
+    }
+
+    .header-cta:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(211,23,31,.28);
+    }
+
+    /* =========================
+       Main / Hero
+    ========================= */
+    main{padding:92px 0 36px}
+
+    .container{
+      /* 1728px幅で約1260pxになる比率。Chrome 67%時の見え方を100%で再現 */
+      width:73vw;
+      max-width:1260px;
+      margin:0 auto;
+    }
+
+    .hero{
+      background:#fff;
+      height:360px;
+      min-height:0;
+      display:grid;
+      grid-template-columns:1.04fr .96fr;
+      gap:28px;
+      padding:18px 38px 0;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-copy{
+      position:relative;
+      z-index:2;
+      padding:0 0 12px;
+    }
+
+    .hero-badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      padding:0 34px 0 20px;
+      margin-bottom:12px;
+      color:#fff;
+      background:var(--navy);
+      font-size:15px;
+      font-weight:800;
+      clip-path:polygon(0 0, 96% 0, 88% 100%, 0 100%);
+      min-width:390px;
+      position:relative;
+    }
+
+    .hero-badge::after{
+      content:"";
+      position:absolute;
+      width:42px;
+      height:100%;
+      right:16px;
+      top:0;
+      background:
+        linear-gradient(
+          105deg,
+          transparent 0 22%,
+          var(--gold) 23% 36%,
+          transparent 37% 48%,
+          var(--gold-light) 49% 63%,
+          transparent 64% 100%
+        );
+    }
+
+    .lead{
+      margin:0 0 9px 8px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.04em;
+      color:var(--navy-deep);
+      line-height:1.3;
+    }
+
+    .lead .accent{
+      color:var(--gold);
+      font-size:1.18em;
+      margin:0 12px;
+      position:relative;
+      display:inline-block;
+    }
+
+    .lead .accent::after{
+      content:"";
+      position:absolute;
+      height:3px;
+      left:-8px;
+      right:-8px;
+      bottom:-6px;
+      border-radius:50%;
+      background:var(--gold);
+      transform:rotate(-1deg);
+    }
+
+    .hero-title{
+      margin:18px 0 18px 8px;
+      font-size:clamp(36px, 2.65vw, 46px);
+      line-height:1.18;
+      letter-spacing:.01em;
+      font-weight:900;
+      color:var(--navy-deep);
+    }
+
+    .hero-cta{
+      width:min(470px,100%);
+      height:54px;
+      margin:0 0 12px 8px;
+      border:none;
+      border-radius:999px;
+      background:linear-gradient(180deg,#e31a22 0%,#c91018 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      padding:0 24px 0 14px;
+      gap:20px;
+      box-shadow:0 8px 0 rgba(130,9,15,.08), 0 8px 16px rgba(211,23,31,.18);
+      cursor:pointer;
+      transition:.2s ease;
+      font:inherit;
+    }
+
+    .hero-cta:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 0 rgba(130,9,15,.06), 0 12px 20px rgba(211,23,31,.22);
+    }
+
+    .hero-cta .free{
+      flex:0 0 40px;
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:#fff;
+      color:var(--red);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .hero-cta .label{
+      flex:1;
+      font-size:18px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .hero-cta .arrow{
+      font-size:24px;
+      line-height:1;
+      transform:translateY(-1px);
+    }
+
+    .security{
+      margin:8px 0 0 54px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--navy);
+      font-size:14px;
+      letter-spacing:.03em;
+    }
+
+    .security svg{
+      width:20px;
+      height:20px;
+      fill:var(--navy);
+      flex:none;
+    }
+
+    /* =========================
+       Hero visual
+    ========================= */
+    .hero-visual{
+      min-height:0;
+      height:100%;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .visual-circle{
+      position:absolute;
+      width:245px;
+      height:245px;
+      border-radius:50%;
+      left:35px;
+      top:58px;
+      background:#f3f6fb;
+      opacity:.95;
+    }
+
+    .chart-bars{
+      position:absolute;
+      top:170px;
+      left:95px;
+      width:70px;
+      height:52px;
+      opacity:.22;
+    }
+
+    .chart-bars span{
+      position:absolute;
+      bottom:0;
+      width:13px;
+      background:#6ca3d4;
+      border-radius:2px 2px 0 0;
+    }
+    .chart-bars span:nth-child(1){left:0;height:22px}
+    .chart-bars span:nth-child(2){left:22px;height:34px}
+    .chart-bars span:nth-child(3){left:44px;height:50px}
+
+    .pie{
+      position:absolute;
+      left:60px;
+      top:258px;
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      background:conic-gradient(#7fb1d7 0 25%, #dce7f3 25% 100%);
+      opacity:.45;
+    }
+
+    .city{
+      position:absolute;
+      left:25px;
+      right:20px;
+      bottom:30px;
+      height:170px;
+      opacity:.35;
+      display:flex;
+      align-items:flex-end;
+      gap:6px;
+      overflow:hidden;
+    }
+
+    .city span{
+      display:block;
+      background:#8dbbdf;
+      border-radius:2px 2px 0 0;
+    }
+
+    .city span:nth-child(1){width:38px;height:90px}
+    .city span:nth-child(2){width:24px;height:70px}
+    .city span:nth-child(3){width:42px;height:120px}
+    .city span:nth-child(4){width:30px;height:84px}
+    .city span:nth-child(5){width:58px;height:145px}
+    .city span:nth-child(6){width:34px;height:105px}
+    .city span:nth-child(7){width:44px;height:72px}
+    .city span:nth-child(8){width:46px;height:132px}
+    .city span:nth-child(9){width:34px;height:90px}
+    .city span:nth-child(10){width:56px;height:118px}
+
+    /* ★ここを人物イラストに差し替え */
+    .advisor{
+      position:relative;
+      z-index:3;
+      width:min(330px, 84%);
+      margin-left:35px;
+      align-self:flex-end;
+    }
+
+    .advisor img{
+      width:100%;
+      height:auto;
+      object-fit:contain;
+      object-position:center bottom;
+    }
+
+    /* =========================
+       Feature section
+    ========================= */
+    .features{
+      margin-top:64px;
+      background:
+        linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),
+        linear-gradient(90deg, rgba(10,47,99,.06) 1px, transparent 1px),
+        linear-gradient(rgba(10,47,99,.06) 1px, transparent 1px);
+      background-size:auto, 52px 52px, 52px 52px;
+      padding:0 0 8px;
+      position:relative;
+    }
+
+    .features-title{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:30px;
+      margin:0 0 6px;
+      font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+      font-size:25px;
+      font-weight:800;
+      letter-spacing:.12em;
+      color:var(--navy-deep);
+    }
+
+    .features-title::before,
+    .features-title::after{
+      content:"";
+      width:115px;
+      height:2px;
+      background:var(--gold);
+    }
+
+    .features-title .num{
+      color:var(--gold);
+      font-size:1.45em;
+      line-height:1;
+      margin:0 3px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:0;
+      padding:0 20px;
+    }
+
+    .feature-card{
+      min-height:142px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:20px 14px 18px;
+      box-shadow:0 8px 18px rgba(10,47,99,.07);
+      margin:0 7px;
+    }
+
+    .feature-number{
+      position:absolute;
+      left:18px;
+      top:18px;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--navy);
+      color:#fff;
+      font-family:Georgia,serif;
+      font-size:21px;
+      font-weight:700;
+    }
+
+    .feature-icon{
+      width:58px;
+      height:58px;
+      margin-bottom:9px;
+      display:grid;
+      place-items:center;
+    }
+
+    .feature-icon svg{
+      width:100%;
+      height:100%;
+    }
+
+    .feature-name{
+      margin:0;
+      font-size:16px;
+      line-height:1.4;
+      font-weight:800;
+      text-align:center;
+      color:#142746;
+      letter-spacing:.04em;
+    }
+
+    .feature-line{
+      width:36px;
+      height:3px;
+      background:var(--gold);
+      margin-top:13px;
+      border-radius:99px;
+    }
+
+
+    /* =========================
+       Questionnaire
+    ========================= */
+    body.questionnaire-open{overflow:hidden;}
+
+    .questionnaire{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      background:rgba(4,25,54,.66);
+      backdrop-filter:blur(3px);
+      padding:26px;
+      overflow:auto;
+    }
+
+    .questionnaire.is-open{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .questionnaire-panel{
+      width:min(760px, 100%);
+      min-height:560px;
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 24px 80px rgba(5,34,72,.25);
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .questionnaire-topbar{
+      height:8px;
+      background:linear-gradient(90deg, var(--navy) 0 76%, var(--gold) 76% 100%);
+    }
+
+    .questionnaire-head{
+      padding:24px 34px 18px;
+      border-bottom:1px solid #edf0f5;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .questionnaire-heading{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.05em;
+    }
+
+    .questionnaire-step{
+      margin-top:6px;
+      font-size:13px;
+      color:#8b919b;
+      font-weight:700;
+    }
+
+    .questionnaire-close{
+      border:0;
+      background:#f4f6f9;
+      color:var(--navy);
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      cursor:pointer;
+      font-size:22px;
+      line-height:1;
+      display:grid;
+      place-items:center;
+      flex:none;
+    }
+
+    .progress-track{height:5px;background:#edf0f4;}
+    .progress-bar{
+      height:100%;
+      width:25%;
+      background:linear-gradient(90deg, var(--navy), var(--gold));
+      transition:width .28s ease;
+    }
+
+    .questionnaire-body{flex:1;padding:38px 48px 40px;}
+    .question-screen{display:none;animation:questionFade .25s ease;}
+    .question-screen.is-active{display:block;}
+
+    @keyframes questionFade{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .question-number{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:30px;
+      padding:0 13px;
+      border-radius:999px;
+      background:#eef3fa;
+      color:var(--navy);
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+
+    .question-title{
+      margin:0 0 25px;
+      color:var(--navy-deep);
+      font-size:26px;
+      line-height:1.5;
+      font-weight:900;
+    }
+
+    .question-lead{
+      margin:-10px 0 26px;
+      color:#5f6875;
+      font-size:15px;
+      line-height:1.9;
+    }
+
+    .answer-list{display:grid;gap:12px;}
+    .answer-button{
+      width:100%;
+      min-height:58px;
+      border:1.5px solid #dfe5ec;
+      background:#fff;
+      color:#183558;
+      border-radius:12px;
+      padding:15px 18px;
+      text-align:left;
+      font:inherit;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .answer-button::after{content:"›";font-size:24px;color:var(--gold);font-weight:800;}
+    .answer-button:hover,.answer-button:focus-visible{
+      border-color:var(--gold);
+      background:#fffaf0;
+      transform:translateY(-1px);
+      outline:none;
+    }
+
+    .select-wrap{position:relative;max-width:430px;}
+    .select-wrap select{
+      width:100%;
+      height:58px;
+      appearance:none;
+      border:1.5px solid #dfe5ec;
+      border-radius:12px;
+      padding:0 48px 0 16px;
+      background:#fff;
+      color:#183558;
+      font:inherit;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .select-wrap::after{
+      content:"⌄";
+      position:absolute;
+      right:18px;
+      top:50%;
+      transform:translateY(-56%);
+      pointer-events:none;
+      color:var(--gold);
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .question-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:28px;}
+    .btn-back,.btn-next,.btn-complete{
+      border:0;
+      border-radius:999px;
+      min-height:48px;
+      padding:0 24px;
+      font:inherit;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .btn-back{background:#eef1f5;color:#526174;}
+    .btn-next,.btn-complete{
+      margin-left:auto;
+      background:var(--red);
+      color:#fff;
+      min-width:180px;
+      box-shadow:0 6px 14px rgba(211,23,31,.16);
+    }
+
+    .contact-grid{display:grid;gap:18px;}
+    .field label{display:block;margin-bottom:8px;font-size:14px;font-weight:900;color:#183558;}
+    .field .required{margin-left:7px;color:var(--red);font-size:11px;}
+    .field input{
+      width:100%;
+      height:52px;
+      border:1.5px solid #dfe5ec;
+      border-radius:10px;
+      padding:0 14px;
+      font:inherit;
+      font-size:16px;
+      color:#16345a;
+      outline:none;
+      transition:.18s ease;
+    }
+    .field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,145,37,.11);}
+    .field-error{min-height:18px;margin-top:5px;color:#c5151c;font-size:12px;font-weight:700;}
+
+    .completion{text-align:left;}
+    .completion-icon{
+      width:64px;height:64px;display:grid;place-items:center;border-radius:50%;
+      background:#f3ead4;color:var(--gold);font-size:34px;font-weight:900;margin-bottom:18px;
+    }
+    .completion-title{margin:0 0 18px;color:var(--navy-deep);font-size:28px;font-weight:900;}
+    .completion-text{margin:0 0 24px;color:#4e5b6b;font-size:15px;line-height:1.9;}
+    .privacy-box{
+      background:#f7f8fa;border:1px solid #e5e9ee;border-radius:14px;padding:18px 20px;margin:0 0 20px;
+    }
+    .privacy-box h4{margin:0 0 8px;color:var(--navy);font-size:15px;}
+    .privacy-box p{margin:0;color:#66707d;font-size:13px;line-height:1.8;}
+    .privacy-box a{color:var(--navy);text-decoration:underline;font-weight:800;}
+    .detail-link{
+      display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;
+      border-radius:999px;background:var(--navy);color:#fff;font-size:15px;font-weight:900;
+      box-shadow:0 6px 16px rgba(10,47,99,.16);
+    }
+    .detail-link span{margin-left:10px;color:var(--gold-light);}
+
+    @media (max-width:720px){
+      .questionnaire{padding:0;}
+      .questionnaire.is-open{align-items:stretch;}
+      .questionnaire-panel{width:100%;min-height:100%;border-radius:0;}
+      .questionnaire-head{padding:18px 18px 14px;}
+      .questionnaire-body{padding:28px 18px 30px;}
+      .question-title{font-size:22px;}
+      .answer-button{font-size:14px;}
+      .question-actions{position:sticky;bottom:0;background:#fff;padding-top:12px;}
+    }
+
+    /* =========================
+       Responsive
+    ========================= */
+
+    @media (min-width: 981px){
+      .hero-copy{
+        padding-top:0;
+      }
+
+      .feature-grid{
+        padding:0 18px;
+      }
+
+      .feature-card{
+        margin:0 6px;
+        padding:16px 12px 14px;
+      }
+
+      .features-title{
+        margin-bottom:6px;
+      }
+    }
+
+    @media (max-width: 980px){
+      .site-header{height:86px}
+      .brand{
+        left:24px;
+        transform:translateY(-50%);
+      }
+      .brand img{width:220px}
+      .header-cta{
+        min-width:auto;
+        height:38px;
+        padding:0 15px;
+        font-size:11px;
+      }
+
+      .container{
+        width:min(92vw, 1080px);
+        max-width:none;
+      }
+
+      .hero{
+        grid-template-columns:1fr;
+        height:auto;
+        min-height:0;
+        padding:22px 26px 0;
+      }
+
+      .hero-copy{max-width:760px;margin:0 auto}
+      .hero-visual{
+        min-height:420px;
+      }
+
+      .hero-title{
+        font-size:44px;
+      }
+
+      .feature-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:14px;
+      }
+
+      .feature-card{margin:0}
+      .feature-card:last-child{grid-column:1 / -1}
+    }
+
+    @media (max-width: 720px){
+      .site-header{height:74px}
+      .header-inner{
+        width:calc(100% - 24px);
+      }
+
+      .brand img{width:150px}
+      .header-cta{
+        height:34px;
+        padding:0 12px;
+        font-size:10px;
+      }
+
+      main{padding:22px 0}
+      .container{
+        width:calc(100% - 24px);
+        max-width:none;
+      }
+
+      .hero{
+        display:block;
+        padding:16px 16px 0;
+      }
+
+      .hero-badge{
+        min-width:0;
+        width:100%;
+        min-height:42px;
+        padding:0 44px 0 14px;
+        font-size:16px;
+      }
+
+      .lead{
+        font-size:22px;
+        margin:0 0 8px 4px;
+      }
+
+      .hero-title{
+        margin:28px 0 22px 2px;
+        font-size:42px;
+        line-height:1.14;
+      }
+
+      .hero-cta{
+        margin-left:0;
+        height:66px;
+        gap:14px;
+        padding:0 18px 0 12px;
+      }
+
+      .hero-cta .free{
+        width:50px;
+        height:50px;
+        flex-basis:50px;
+        font-size:13px;
+      }
+
+      .hero-cta .label{
+        font-size:17px;
+      }
+
+      .hero-cta .arrow{font-size:25px}
+      .security{
+        margin:12px 0 0;
+        justify-content:center;
+        font-size:12px;
+      }
+
+      .hero-visual{
+        min-height:360px;
+        margin-top:8px;
+      }
+
+      .advisor{
+        width:340px;
+        max-width:90%;
+        margin-left:20px;
+      }
+
+      .visual-circle{
+        width:250px;
+        height:250px;
+        left:50%;
+        transform:translateX(-60%);
+        top:58px;
+      }
+
+      .features{margin-top:18px}
+      .features-title{
+        gap:12px;
+        font-size:22px;
+        letter-spacing:.05em;
+      }
+
+      .features-title::before,
+      .features-title::after{
+        width:45px;
+      }
+
+      .feature-grid{
+        grid-template-columns:1fr;
+        padding:0 4px;
+      }
+
+      .feature-card:last-child{grid-column:auto}
+    }
   </style>
 </head>
+
 <body>
 
-  <h2>診断フォーム送信テスト</h2>
+  <header class="site-header">
+    <div class="header-inner">
 
-  <form id="testForm">
-    <div class="field">
-      <label>仮の診断結果</label>
-      <input type="text" id="diagnosisResult" value="Bプラン（おすすめ）" readonly style="background:#eee;">
+      <a class="brand" href="#" aria-label="SHOWTIME GROUP">
+        <!--
+          ★ ロゴ画像を配置
+          例: assets/showtime-group-logo.png
+        -->
+        <img src="assets/showtime-group-logo.png" alt="SHOWTIME GROUP">
+      </a>
+
+      <button class="header-cta js-open-questionnaire" type="button">
+        詳細はこちらから
+        <span>→</span>
+      </button>
+
     </div>
-    
-    <div class="field">
-      <label>お名前</label>
-      <input type="text" id="name" placeholder="山田 太郎" required>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section class="hero">
+        <div class="hero-copy">
+
+          <div class="hero-badge">
+            法人向け節税/決算対策を検討中の方へ
+          </div>
+
+          <p class="lead">
+            まずは
+            <span class="accent">資料請求</span>
+            から
+          </p>
+
+          <h1 class="hero-title">
+            トレカ自販機の<br>
+            導入・ご相談はこちら
+          </h1>
+
+          <button id="request" class="hero-cta js-open-questionnaire" type="button">
+            <span class="free">無料</span>
+            <span class="label">詳細はこちらから</span>
+            <span class="arrow">›</span>
+          </button>
+
+          <div class="security">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17 8h-1V6a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Zm-7-2a2 2 0 0 1 4 0v2h-4V6Zm3 9.73V18h-2v-2.27a2 2 0 1 1 2 0Z"/>
+            </svg>
+            <span>ご入力いただく情報は安全に管理されます</span>
+          </div>
+
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="visual-circle"></div>
+
+          <div class="chart-bars">
+            <span></span><span></span><span></span>
+          </div>
+
+          <div class="pie"></div>
+
+          <div class="city">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="advisor">
+            <!--
+              ★ 人物イラストを配置
+              PNG透過推奨
+              例: assets/advisor.png
+            -->
+            <img src="assets/advisor.png" alt="">
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <h2 class="features-title">
+          資料請求でわかる<span class="num">5</span>つのこと
+        </h2>
+
+        <div class="feature-grid">
+
+          <article class="feature-card">
+            <span class="feature-number">1</span>
+            <div class="feature-icon">
+              <svg viewBox="0 0 90 90" fill="none">
+                <rect x="22" y="10" width="48" height="68" rx="2"
+                      stroke="#0a2f63" stroke-width="6"/>
+                <rect x="31" y="20" width="9" height="9" fill="#c89125"/>
+                <rect x="45" y="20" width="9" height="9" fill="#c89125"/>
+                <rect x="58" y="20" width="9" height="9" fill="#c89125"/>
+                <rect x="31" y="34" width="9" height="9" fill="#c89125"/>
+                <rect x="45" y="34" width="9" height="9" fill="#c89125"/>
+                <rect x="58" y="34" width="9" height="9" fill="#c89125"/>
+                <rect x="31" y="48" width="9" height="9" fill="#c89125"/>
+                <rect x="45" y="48" width="9" height="9" fill="#c89125"/>
+                <rect x="58" y="48" width="9" height="9" fill="#c89125"/>
+                <rect x="31" y="62" width="29" height="8" stroke="#0a2f63" stroke-width="4"/>
+              </svg>
+            </div>
+            <p class="feature-name">商品の仕組み</p>
+            <span class="feature-line"></span>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">2</span>
+            <div class="feature-icon">
+              <svg viewBox="0 0 90 90" fill="none">
+                <rect x="17" y="10" width="48" height="66" rx="4"
+                      stroke="#0a2f63" stroke-width="6"/>
+                <rect x="25" y="18" width="32" height="13" rx="2"
+                      fill="#dce7f3"/>
+                <g fill="#0a2f63">
+                  <rect x="25" y="40" width="8" height="8" rx="1"/>
+                  <rect x="39" y="40" width="8" height="8" rx="1"/>
+                  <rect x="53" y="40" width="8" height="8" rx="1"/>
+                  <rect x="25" y="54" width="8" height="8" rx="1"/>
+                  <rect x="39" y="54" width="8" height="8" rx="1"/>
+                  <rect x="53" y="54" width="8" height="8" rx="1"/>
+                </g>
+                <circle cx="67" cy="62" r="17" fill="#c89125"/>
+                <text x="67" y="68" text-anchor="middle"
+                      font-size="20" font-weight="800" fill="#fff">¥</text>
+              </svg>
+            </div>
+            <p class="feature-name">節税の考え方</p>
+            <span class="feature-line"></span>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">3</span>
+            <div class="feature-icon">
+              <svg viewBox="0 0 90 90" fill="none">
+                <rect x="15" y="55" width="10" height="22" fill="#0a2f63"/>
+                <rect x="35" y="45" width="10" height="32" fill="#0a2f63"/>
+                <rect x="55" y="34" width="10" height="43" fill="#0a2f63"/>
+                <rect x="75" y="23" width="8" height="54" fill="#0a2f63"/>
+                <path d="M18 42L36 28L54 34L75 13"
+                      stroke="#c89125" stroke-width="5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M68 13H78V23" stroke="#c89125"
+                      stroke-width="5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p class="feature-name">導入費用の目安</p>
+            <span class="feature-line"></span>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">4</span>
+            <div class="feature-icon">
+              <svg viewBox="0 0 90 90" fill="none">
+                <path d="M20 47V39a25 25 0 0 1 50 0v8"
+                      stroke="#0a2f63" stroke-width="6"/>
+                <rect x="15" y="44" width="13" height="25" rx="6"
+                      fill="#0a2f63"/>
+                <rect x="62" y="44" width="13" height="25" rx="6"
+                      fill="#0a2f63"/>
+                <path d="M66 68c0 8-8 11-17 11"
+                      stroke="#0a2f63" stroke-width="5"
+                      stroke-linecap="round"/>
+                <rect x="41" y="75" width="13" height="7" rx="3.5"
+                      fill="#c89125"/>
+              </svg>
+            </div>
+            <p class="feature-name">運営サポート内容</p>
+            <span class="feature-line"></span>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">5</span>
+            <div class="feature-icon">
+              <svg viewBox="0 0 90 90" fill="none">
+                <rect x="24" y="14" width="43" height="62" rx="3"
+                      stroke="#0a2f63" stroke-width="6"/>
+                <rect x="36" y="8" width="20" height="10" rx="4"
+                      fill="#0a2f63"/>
+                <path d="M33 32l4 4 7-8M33 47l4 4 7-8M33 62l4 4 7-8"
+                      stroke="#c89125" stroke-width="4"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M48 32h11M48 47h11M48 62h11"
+                      stroke="#0a2f63" stroke-width="4"
+                      stroke-linecap="round"/>
+                <circle cx="68" cy="69" r="13" fill="#c89125"/>
+                <path d="m62 69 4 4 8-9" stroke="#fff" stroke-width="3.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="feature-name">導入までの流れ</p>
+            <span class="feature-line"></span>
+          </article>
+
+        </div>
+      </section>
+
     </div>
+  </main>
 
-    <div class="field">
-      <label>電話番号</label>
-      <input type="tel" id="phone" placeholder="09012345678" required>
+
+  <div class="questionnaire" id="questionnaire" aria-hidden="true">
+    <div class="questionnaire-panel" role="dialog" aria-modal="true" aria-labelledby="questionnaireTitle">
+      <div class="questionnaire-topbar"></div>
+
+      <div class="questionnaire-head">
+        <div>
+          <p class="questionnaire-heading" id="questionnaireTitle">トレカ自販機 導入・ご相談フォーム</p>
+          <div class="questionnaire-step" id="stepText">STEP 1 / 4</div>
+        </div>
+        <button class="questionnaire-close" id="questionnaireClose" type="button" aria-label="閉じる">×</button>
+      </div>
+
+      <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+
+      <div class="questionnaire-body">
+        <form id="inquiryForm" novalidate>
+          <section class="question-screen is-active" data-step="1">
+            <div class="question-number">質問 1</div>
+            <h3 class="question-title">お問い合わせ内容について</h3>
+            <div class="answer-list">
+              <button type="button" class="answer-button" data-answer-name="inquiryType" data-answer-value="トレカ自販機についての資料をダウンロードしたい">トレカ自販機についての資料をダウンロードしたい</button>
+              <button type="button" class="answer-button" data-answer-name="inquiryType" data-answer-value="無料相談をしたい">無料相談をしたい</button>
+              <button type="button" class="answer-button" data-answer-name="inquiryType" data-answer-value="商品購入を希望している">商品購入を希望している</button>
+              <button type="button" class="answer-button" data-answer-name="inquiryType" data-answer-value="業務提携について相談したい">業務提携について相談したい</button>
+            </div>
+          </section>
+
+          <section class="question-screen" data-step="2">
+            <div class="question-number">質問 2</div>
+            <h3 class="question-title">直近の営業利益（着地見込み）はどのくらいですか？</h3>
+            <div class="answer-list">
+              <button type="button" class="answer-button" data-answer-name="operatingProfit" data-answer-value="1,000万円未満">1,000万円未満</button>
+              <button type="button" class="answer-button" data-answer-name="operatingProfit" data-answer-value="1,000万円～3,000万円">1,000万円～3,000万円</button>
+              <button type="button" class="answer-button" data-answer-name="operatingProfit" data-answer-value="3,000万円～5,000万円">3,000万円～5,000万円</button>
+              <button type="button" class="answer-button" data-answer-name="operatingProfit" data-answer-value="5,000万円以上">5,000万円以上</button>
+              <button type="button" class="answer-button" data-answer-name="operatingProfit" data-answer-value="わからない">わからない</button>
+            </div>
+            <div class="question-actions"><button class="btn-back" type="button" data-back>戻る</button></div>
+          </section>
+
+          <section class="question-screen" data-step="3">
+            <div class="question-number">質問 3</div>
+            <h3 class="question-title">貴社の決算月を教えてください</h3>
+            <div class="select-wrap">
+              <select id="closingMonth" name="closingMonth" aria-label="決算月">
+                <option value="">選択してください</option>
+                <option value="1月">1月</option><option value="2月">2月</option><option value="3月">3月</option>
+                <option value="4月">4月</option><option value="5月">5月</option><option value="6月">6月</option>
+                <option value="7月">7月</option><option value="8月">8月</option><option value="9月">9月</option>
+                <option value="10月">10月</option><option value="11月">11月</option><option value="12月">12月</option>
+                <option value="わからない">わからない</option>
+              </select>
+            </div>
+            <div class="question-actions">
+              <button class="btn-back" type="button" data-back>戻る</button>
+              <button class="btn-next" type="button" id="monthNext">次へ</button>
+            </div>
+          </section>
+
+          <section class="question-screen" data-step="4">
+            <div class="question-number">質問 4</div>
+            <h3 class="question-title">連絡先情報</h3>
+            <p class="question-lead">ご希望に合わせて資料のご案内やご相談対応をさせていただく為、<br>以下の連絡先情報をご入力ください。</p>
+            <div class="contact-grid">
+              <div class="field">
+                <label for="email">メールアドレス<span class="required">必須</span></label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="example@company.jp" required>
+                <div class="field-error" id="emailError"></div>
+              </div>
+              <div class="field">
+                <label for="name">氏名<span class="required">必須</span></label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="山田 太郎" required>
+                <div class="field-error" id="nameError"></div>
+              </div>
+              <div class="field">
+                <label for="phone">電話番号<span class="required">必須</span></label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="09012345678" required>
+                <div class="field-error" id="phoneError"></div>
+              </div>
+            </div>
+            <div class="question-actions">
+              <button class="btn-back" type="button" data-back>戻る</button>
+              <button class="btn-complete" type="button" id="completeButton">回答を完了する</button>
+            </div>
+          </section>
+
+          <section class="question-screen completion" data-step="5">
+            <div class="completion-icon">✓</div>
+            <h3 class="completion-title">ご回答ありがとうございました。</h3>
+            <p class="completion-text">ご回答内容を元に、トレカ自販機について最適な情報をご案内いたします。</p>
+            <div class="privacy-box">
+              <h4>プライバシーポリシー</h4>
+              <p>ご入力いただいた個人情報は、お問い合わせへの回答、資料のご案内、ご相談対応などの目的で取り扱います。個人情報の取扱いについては、<a href="https://showtime-traca.com/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。</p>
+            </div>
+            <a class="detail-link" href="https://showtime-traca.com/" target="_blank" rel="noopener noreferrer">トレカ自販機の詳細ページはこちら <span>→</span></a>
+          </section>
+
+          <input type="hidden" id="inquiryType" name="inquiryType">
+          <input type="hidden" id="operatingProfit" name="operatingProfit">
+        </form>
+      </div>
     </div>
-
-    <button type="submit" id="submitBtn">送信して連携テスト</button>
-  </form>
-
-  <div id="message"></div>
+  </div>
 
   <script>
-    // ★先頭の「YO」を削除して正しいURLに修正しました★
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxySxS_q9BGOkBwZKbCcXTyhARo6eIj4yIN2Ekt3CTWIoSUZuD-Qfy5BvfG6DV60Wue/exec";
+    (() => {
+      const questionnaire = document.getElementById('questionnaire');
+      const closeButton = document.getElementById('questionnaireClose');
+      const openButtons = document.querySelectorAll('.js-open-questionnaire');
+      const screens = [...document.querySelectorAll('.question-screen')];
+      const progressBar = document.getElementById('progressBar');
+      const stepText = document.getElementById('stepText');
+      const monthSelect = document.getElementById('closingMonth');
+      const monthNext = document.getElementById('monthNext');
+      const completeButton = document.getElementById('completeButton');
+      const form = document.getElementById('inquiryForm');
+      let currentStep = 1;
 
-    document.getElementById('testForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const submitBtn = document.getElementById('submitBtn');
-      const messageDiv = document.getElementById('message');
-
-      // ボタンを無効化（二重送信防止）
-      submitBtn.disabled = true;
-      submitBtn.innerText = "送信中...";
-      messageDiv.innerText = "";
-
-      // 送信するデータの組み立て
-      const payload = {
-        diagnosisResult: document.getElementById('diagnosisResult').value,
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value
+      const showStep = (step) => {
+        currentStep = step;
+        screens.forEach(screen => screen.classList.toggle('is-active', Number(screen.dataset.step) === step));
+        if (step <= 4) {
+          stepText.textContent = `STEP ${step} / 4`;
+          progressBar.style.width = `${step * 25}%`;
+        } else {
+          stepText.textContent = '完了';
+          progressBar.style.width = '100%';
+        }
       };
 
-      // GASへ非同期通信（fetch）
-      fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        // CORSブロックを回避するため Content-Type を text/plain に変更
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        messageDiv.style.color = "green";
-        messageDiv.innerText = "送信完了！スプレッドシートを確認してください。";
-        submitBtn.innerText = "送信完了";
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        messageDiv.style.color = "red";
-        messageDiv.innerText = "送信エラーが発生しました。";
-        submitBtn.disabled = false;
-        submitBtn.innerText = "送信して連携テスト";
+      const openQuestionnaire = () => {
+        questionnaire.classList.add('is-open');
+        questionnaire.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('questionnaire-open');
+        showStep(1);
+      };
+      const closeQuestionnaire = () => {
+        questionnaire.classList.remove('is-open');
+        questionnaire.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('questionnaire-open');
+      };
+
+      openButtons.forEach(button => button.addEventListener('click', openQuestionnaire));
+      closeButton.addEventListener('click', closeQuestionnaire);
+      questionnaire.addEventListener('click', e => { if (e.target === questionnaire) closeQuestionnaire(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && questionnaire.classList.contains('is-open')) closeQuestionnaire(); });
+
+      document.querySelectorAll('.answer-button').forEach(button => {
+        button.addEventListener('click', () => {
+          document.getElementById(button.dataset.answerName).value = button.dataset.answerValue;
+          showStep(currentStep + 1);
+        });
       });
-    });
+
+      document.querySelectorAll('[data-back]').forEach(button => {
+        button.addEventListener('click', () => showStep(Math.max(1, currentStep - 1)));
+      });
+
+      monthNext.addEventListener('click', () => {
+        if (!monthSelect.value) {
+          monthSelect.focus();
+          monthSelect.style.borderColor = '#c5151c';
+          return;
+        }
+        monthSelect.style.borderColor = '';
+        showStep(4);
+      });
+
+      const setError = (id, message) => { document.getElementById(id).textContent = message; };
+      const validateContact = () => {
+        const email = document.getElementById('email');
+        const name = document.getElementById('name');
+        const phone = document.getElementById('phone');
+        let valid = true;
+        setError('emailError', ''); setError('nameError', ''); setError('phoneError', '');
+
+        if (!email.value.trim()) { setError('emailError', 'メールアドレスを入力してください。'); valid = false; }
+        else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value.trim())) { setError('emailError', 'メールアドレスの形式をご確認ください。'); valid = false; }
+
+        if (!name.value.trim()) { setError('nameError', '氏名を入力してください。'); valid = false; }
+
+        const phoneValue = phone.value.replace(/[\\s\\-()]/g, '');
+        if (!phoneValue) { setError('phoneError', '電話番号を入力してください。'); valid = false; }
+        else if (!/^\\+?\\d{10,15}$/.test(phoneValue)) { setError('phoneError', '電話番号の形式をご確認ください。'); valid = false; }
+        return valid;
+      };
+
+      completeButton.addEventListener('click', () => {
+        if (!validateContact()) return;
+        /*
+          現在は画面遷移のみです。実際に回答データを保存・送信する場合は、
+          ここでAPI / Google Apps Script / フォームサービス等へ送信処理を追加してください。
+          const data = Object.fromEntries(new FormData(form).entries());
+        */
+        showStep(5);
+      });
+      form.addEventListener('submit', e => e.preventDefault());
+    })();
   </script>
 
 </body>
